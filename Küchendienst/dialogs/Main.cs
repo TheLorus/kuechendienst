@@ -463,5 +463,11 @@ namespace Küchendienst
             PasswordChange pw = new PasswordChange();
             DialogResult dr = pw.ShowDialog();
         }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            About about = new About();
+            about.ShowDialog();
+        }
     }
 }

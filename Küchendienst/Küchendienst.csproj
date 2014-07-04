@@ -94,6 +94,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="dialogs\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dialogs\About.Designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
     <Compile Include="dialogs\addDienst.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,6 +113,12 @@
       <DependentUpon>addTeilnehmer.cs</DependentUpon>
     </Compile>
     <Compile Include="classes\DBHelper.cs" />
+    <Compile Include="dialogs\Lizenz.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dialogs\Lizenz.Designer.cs">
+      <DependentUpon>Lizenz.cs</DependentUpon>
+    </Compile>
     <Compile Include="dialogs\PasswordChange.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,11 +158,17 @@
     <Compile Include="dialogs\Teilnehmer.Designer.cs">
       <DependentUpon>Teilnehmer.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="dialogs\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="dialogs\addDienst.resx">
       <DependentUpon>addDienst.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="dialogs\addTeilnehmer.resx">
       <DependentUpon>addTeilnehmer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dialogs\Lizenz.resx">
+      <DependentUpon>Lizenz.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="dialogs\PasswordChange.resx">
       <DependentUpon>PasswordChange.cs</DependentUpon>
@@ -172,6 +190,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="dialogs\selectTeilnehmer.resx">
       <DependentUpon>selectTeilnehmer.cs</DependentUpon>
@@ -214,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.ico" />
+    <None Include="assets\kirby.png" />
     <EmbeddedResource Include="assets\empty.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
