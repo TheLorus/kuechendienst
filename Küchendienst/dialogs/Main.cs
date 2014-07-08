@@ -248,17 +248,17 @@ namespace Küchendienst
         private void btn_member_Click(object sender, EventArgs e)
         {
             teilnehmer.ShowDialog();
-            refresh();
+            refreshAll();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             addDienst dienst = new addDienst();
             dienst.ShowDialog();
-            refresh();
+            refreshAll();
         }
 
-        private void refresh(bool init=false)
+        private void refreshAll(bool init=false)
         {
             var box = comboBox1;
             var result = DBHelper.query("SELECT kalenderwoche from dienst group by kalenderwoche order by kalenderwoche desc");
@@ -281,6 +281,28 @@ namespace Küchendienst
             string html = "<body style=\"background-color:" + HexConverter(SystemColors.Control) + ";\">" + generateHTML(kw) + "</body>";
 
             if (init)
+            {
+                webBrowser1.DocumentText = html;
+            }
+            else
+            {
+                webBrowser1.Document.OpenNew(false);
+                webBrowser1.Document.Write(html);
+                webBrowser1.Refresh();
+            }
+        }
+
+        private void refreshHtml(bool init = false)
+        {
+
+            int kw = 0;
+            if (comboBox1.Items.Count > 0)
+            {
+                kw = int.Parse(comboBox1.SelectedItem.ToString());
+            }
+            string html = "<body style=\"background-color:" + HexConverter(SystemColors.Control) + ";\">" + generateHTML(kw) + "</body>";
+
+            if (String.IsNullOrEmpty(webBrowser1.DocumentText))
             {
                 webBrowser1.DocumentText = html;
             }
@@ -430,7 +452,7 @@ namespace Küchendienst
         {
             SingleView sv = new SingleView();
             sv.ShowDialog();
-            refresh();
+            refreshAll();
         }
 
         private void Main_Shown(object sender, EventArgs e)
@@ -439,7 +461,7 @@ namespace Küchendienst
             {
                 DBHelper.init("12345");
                 teilnehmer = new Teilnehmer();
-                refresh(true);
+                refreshAll(true);
                 return;
             }
 
@@ -450,7 +472,7 @@ namespace Küchendienst
             {
                 DBHelper.init(pw.txt_pw.Text);
                 teilnehmer = new Teilnehmer();
-                refresh(true);
+                refreshAll(true);
             }
             else
             {
@@ -468,6 +490,11 @@ namespace Küchendienst
         {
             About about = new About();
             about.ShowDialog();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refreshHtml();
         }
     }
 }
