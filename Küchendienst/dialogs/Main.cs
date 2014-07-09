@@ -68,36 +68,41 @@ namespace Küchendienst
                 Directory.CreateDirectory(dirName);
             string dllPath = Path.Combine(dirName, filename);
 
-            // Get the embedded resource stream that holds the Internal DLL in this assembly.
-            // The name looks funny because it must be the default namespace of this project
-            // (MyAssembly.) plus the name of the Properties subdirectory where the
-            // embedded resource resides (Properties.) plus the name of the file.
-            using (Stream stm = Assembly.GetExecutingAssembly().GetManifestResourceStream(
-              "Küchendienst.dlls."+filename))
-            {
-                // Copy the assembly to the temporary file
-                try
+
+            if (!File.Exists(dllPath)) {
+
+                // Get the embedded resource stream that holds the Internal DLL in this assembly.
+                // The name looks funny because it must be the default namespace of this project
+                // (MyAssembly.) plus the name of the Properties subdirectory where the
+                // embedded resource resides (Properties.) plus the name of the file.
+                using (Stream stm = Assembly.GetExecutingAssembly().GetManifestResourceStream(
+                  "Küchendienst.dlls." + filename))
                 {
-                    using (Stream outFile = File.Create(dllPath))
+                    // Copy the assembly to the temporary file
+                    try
                     {
-                        const int sz = 4096;
-                        byte[] buf = new byte[sz];
-                        while (true)
+                        using (Stream outFile = File.Create(dllPath))
                         {
-                            int nRead = stm.Read(buf, 0, sz);
-                            if (nRead < 1)
-                                break;
-                            outFile.Write(buf, 0, nRead);
+                            const int sz = 4096;
+                            byte[] buf = new byte[sz];
+                            while (true)
+                            {
+                                int nRead = stm.Read(buf, 0, sz);
+                                if (nRead < 1)
+                                    break;
+                                outFile.Write(buf, 0, nRead);
+                            }
                         }
                     }
+                    catch
+                    {
+                        // This may happen if another process has already created and loaded the file.
+                        // Since the directory includes the version number of this assembly we can
+                        // assume that it's the same bits, so we just ignore the excecption here and
+                        // load the DLL.
+                    }
                 }
-                catch
-                {
-                    // This may happen if another process has already created and loaded the file.
-                    // Since the directory includes the version number of this assembly we can
-                    // assume that it's the same bits, so we just ignore the excecption here and
-                    // load the DLL.
-                }
+            
             }
 
             // We must explicitly load the DLL here because the temporary directory 
@@ -212,7 +217,7 @@ namespace Küchendienst
             {
                 if (double.Parse(row["score"].ToString()) == 0.0 || bool.Parse(row["low"].ToString()))
                 {
-                    the_html += string.Format("<tr bgcolor=\"#C6C6C6\"><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>", row["Nachname"] + ", " + row["Vorname"], row["count4"], row["count8"], row["count12"], row["score"]);
+                    the_html += string.Format("<tr bgcolor=\"#949292\"><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4}</td></tr>", row["Nachname"] + ", " + row["Vorname"], row["count4"], row["count8"], row["count12"], row["score"]);
                 }
                 else
                 {
