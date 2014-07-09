@@ -258,19 +258,21 @@ namespace Küchendienst
             refresh();
         }
 
-        private void refresh(bool init=false)
+        private void refresh(bool htmlOnly=false)
         {
-            var box = comboBox1;
-            var result = DBHelper.query("SELECT kalenderwoche from dienst group by kalenderwoche order by kalenderwoche desc");
-            box.Items.Clear();
-            box.ResetText();
-            foreach (DataRow row in result.Rows)
-            {
-                box.Items.Add(row["kalenderwoche"].ToString());
-            }
-            if (box.Items.Count > 0)
-            {
-                box.SelectedIndex = 0;
+            if (!htmlOnly) {
+                var box = comboBox1;
+                var result = DBHelper.query("SELECT kalenderwoche from dienst group by kalenderwoche order by kalenderwoche ASC");
+                box.Items.Clear();
+                box.ResetText();
+                foreach (DataRow row in result.Rows)
+                {
+                    box.Items.Add(row["kalenderwoche"].ToString());
+                }
+                if (box.Items.Count > 0)
+                {
+                    box.SelectedIndex = box.Items.Count - 1;
+                }
             }
 
             int kw = 0;
@@ -280,7 +282,7 @@ namespace Küchendienst
             }
             string html = "<body style=\"background-color:" + HexConverter(SystemColors.Control) + ";\">" + generateHTML(kw) + "</body>";
 
-            if (init)
+            if (String.IsNullOrEmpty(webBrowser1.DocumentText))
             {
                 webBrowser1.DocumentText = html;
             }
@@ -309,7 +311,7 @@ namespace Küchendienst
 
             int kwnext = kw + 1;
             int year = DateTime.Now.Year;
-            saveFileDialog1.FileName = String.Format("küchendienst_{0}_kw{1:00}", year, kw+1);
+            saveFileDialog1.FileName = String.Format("küchendienst_{0}_kw{1:00}", year, kw);
 
             String query = @"
                 SELECT teilnehmer.vorname, teilnehmer.nachname
@@ -439,7 +441,7 @@ namespace Küchendienst
             {
                 DBHelper.init("12345");
                 teilnehmer = new Teilnehmer();
-                refresh(true);
+                refresh();
                 return;
             }
 
@@ -450,7 +452,7 @@ namespace Küchendienst
             {
                 DBHelper.init(pw.txt_pw.Text);
                 teilnehmer = new Teilnehmer();
-                refresh(true);
+                refresh();
             }
             else
             {
@@ -468,6 +470,11 @@ namespace Küchendienst
         {
             About about = new About();
             about.ShowDialog();
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            refresh(true);
         }
     }
 }
